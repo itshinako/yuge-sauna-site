@@ -191,9 +191,14 @@
               <p class="field-error" id="plan-error" aria-live="polite"></p>
             </div>
 
-            <div class="form-field">
+            <div class="form-field form-field--date">
               <label for="date">利用希望日 <span>*</span></label>
-              <input id="date" type="date" name="date" required aria-describedby="date-error">
+              <div class="date-input-wrap">
+                <input id="date" type="date" name="date" required aria-describedby="date-error" inputmode="none">
+                <button type="button" class="date-picker-button" id="date-picker-button" aria-label="カレンダーを開く" title="カレンダーを開く">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 9h18"/></svg>
+                </button>
+              </div>
               <p class="field-error" id="date-error" aria-live="polite"></p>
             </div>
 
@@ -259,6 +264,7 @@
           <p class="field-error field-error--consent" id="consent-error" aria-live="polite"></p>
 
           <button type="submit" class="button button--primary-cta reservation-submit">予約内容を送信する</button>
+          <p class="form-submit-status" id="form-submit-status" role="status" aria-live="polite"></p>
           <p class="form-note">※このフォームは予約希望を受け付け、店舗側のGoogleスプレッドシートへ記録します。空き枠を自動確保するものではありません。</p>
         </form>
 

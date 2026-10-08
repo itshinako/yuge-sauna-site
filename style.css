@@ -1148,7 +1148,53 @@
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* 選択欄・日付欄・入力エラーを必ず同じ項目内で縦に揃える */
+.form-field > label,
+.form-field > select,
+.form-field > input,
+.form-field > .date-input-wrap,
+.form-field > .field-error {
+  flex: 0 0 auto;
+}
+
+.date-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.date-input-wrap input {
+  padding-right: 48px;
+  cursor: pointer;
+}
+
+.date-picker-button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 38px;
+  height: 38px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-primary-light);
+  cursor: pointer;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.date-picker-button:hover {
+  background: rgba(212, 163, 115, 0.08);
+}
+
+.date-picker-button:active {
+  transform: translateY(-50%) scale(0.94);
 }
 
 .form-field--full { margin-top: 18px; }
@@ -1192,6 +1238,7 @@
 .field-error {
   min-height: 1.15em;
   margin: 0;
+  width: 100%;
   color: #e78b82;
   font-family: var(--font-sans);
   font-size: 0.72rem;
@@ -1232,6 +1279,20 @@
   margin-top: 4px;
   accent-color: var(--color-primary);
 }
+
+.form-submit-status {
+  min-height: 1.5em;
+  margin: 10px 0 0;
+  color: #e78b82;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.form-submit-status:empty { display: none; }
+.form-submit-status.is-success { color: #b8f2cd; }
+.form-submit-status.is-error { color: #e78b82; }
 
 .form-note {
   margin-top: 10px;

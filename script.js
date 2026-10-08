@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =========================================================
      1. 公開後にここだけ変更
   ========================================================= */
-  const GAS_WEB_APP_URL = "ここにGASのWebアプリURLを貼り付け";
+  // Google Apps Script をWebアプリとしてデプロイした後、ここに /exec URL を設定してください。
+  const GAS_WEB_APP_URL = "";
   const LINE_URL = "ここに公式LINEの友だち追加URLを貼り付け";
 
   /* =========================================================
@@ -82,6 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const reservationFrame = document.querySelector("#reservation-submit-frame");
   const reservationBack = document.querySelector("#reservation-back");
   const reservationSubmit = document.querySelector(".reservation-submit");
+  const formSubmitStatus = document.querySelector("#form-submit-status");
+  const dateInput = document.querySelector("#date");
+  const datePickerButton = document.querySelector("#date-picker-button");
   let reservationSubmitting = false;
   let frameLoadedBeforeSubmit = false;
 
@@ -142,6 +146,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const dd = String(today.getDate()).padStart(2, "0");
     fields.date?.input?.setAttribute("min", `${yyyy}-${mm}-${dd}`);
 
+    // 日付欄は入力を求めず、タップ/クリックでネイティブカレンダーを開く。
+    const openDatePicker = () => {
+      if (!dateInput) return;
+      dateInput.focus({ preventScroll: true });
+      if (typeof dateInput.showPicker === "function") {
+        try { dateInput.showPicker(); } catch (_) {}
+      }
+    };
+    dateInput?.addEventListener("click", openDatePicker);
+    datePickerButton?.addEventListener("click", openDatePicker);
+
     reservationFrame.addEventListener("load", () => {
       if (!reservationSubmitting || !frameLoadedBeforeSubmit) return;
       reservationSubmitting = false;
@@ -165,8 +180,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!GAS_WEB_APP_URL.startsWith("https://script.google.com/")) {
-        alert("予約フォームの接続先（GAS WebアプリURL）がまだ設定されていません。script.js の GAS_WEB_APP_URL を設定してください。");
+        if (formSubmitStatus) {
+          formSubmitStatus.textContent = "予約フォームの接続先がまだ設定されていません。script.js の GAS_WEB_APP_URL に、GASのWebアプリURL（/exec）を設定してください。";
+          formSubmitStatus.classList.add("is-error");
+        }
         return;
+      }
+
+      if (formSubmitStatus) {
+        formSubmitStatus.textContent = "";
+        formSubmitStatus.classList.remove("is-error", "is-success");
       }
 
       if (reservationSubmitting) return;
@@ -186,7 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
           reservationSubmit.disabled = false;
           reservationSubmit.textContent = "予約内容を送信する";
         }
-        alert("送信結果を確認できませんでした。Googleスプレッドシートをご確認いただくか、時間を置いて再度お試しください。");
+        if (formSubmitStatus) {
+          formSubmitStatus.textContent = "送信結果を確認できませんでした。GASのWebアプリ設定とGoogleスプレッドシートをご確認ください。";
+          formSubmitStatus.classList.add("is-error");
+        }
       }, 10000);
     });
 
@@ -199,6 +225,10 @@ document.addEventListener("DOMContentLoaded", () => {
         setError(fields[key].input, fields[key].error, fields[key].message, false);
       });
       if (consentError) consentError.textContent = "";
+      if (formSubmitStatus) {
+        formSubmitStatus.textContent = "";
+        formSubmitStatus.classList.remove("is-error", "is-success");
+      }
       consent?.closest(".form-consent")?.classList.remove("has-error");
       consent?.setAttribute("aria-invalid", "false");
       if (reservationSubmit) {
