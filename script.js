@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
      1. 公開後にここだけ変更
   ========================================================= */
   // Google Apps Script をWebアプリとしてデプロイした後、ここに /exec URL を設定してください。
-  const GAS_WEB_APP_URL = "";
+  const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwtITHnKnaZTb35a_qvgODPqaCv-lsVWz_5cvKUnap4S5Os5chsniO5uoYf8rfQjk54/exec";
   const LINE_URL = "ここに公式LINEの友だち追加URLを貼り付け";
 
   /* =========================================================
